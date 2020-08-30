@@ -1,11 +1,13 @@
+const fs = require('fs')
 const express = require('express')
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const router = require('./routes')
+
+process.env.RSA_PUBLIC_KEY = fs.readFileSync('./keys/public.key');
+process.env. RSA_PRIVATE_KEY = fs.readFileSync('./keys/private.key');
+
 const app = express()
-
-
-
+const router = require('./routes')
 
 app.use(cors());
 // parse requests of content-type - application/json

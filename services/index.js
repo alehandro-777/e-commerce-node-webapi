@@ -1,8 +1,7 @@
 const db = require('../db');
 const User = require('../models/user');
 const jwt = require('jsonwebtoken');
-const fs = require('fs');
-const path = require('path')
+
 
 const defaultPageLimit = 20;
 
@@ -104,39 +103,40 @@ const checkIfAuthenticatedFunc = expressJwt({
 exports.login = (body) => {
 
     return new Promise((resolve, reject) => {
-        //get private key
-        const private_key_file_path = path.join(__dirname, '../keys/private.key')
-
-        fs.readFile(private_key_file_path, 
-            (err, privateKey) =>{              
-                if(err) reject(err);
-                    //validate login And Password
-                    db.findOne(User, {"name": body.login})
-                    .then( 
-                        (user) => {
-                            if (user) {
-                                //check password ???
-                                user.password === body.password;
-                                const jwtBearerToken = jwt.sign({}, privateKey, {
-                                    algorithm: 'RS256',
-                                    expiresIn: 120,
-                                    subject: user._id
-                                    });
-                                    resolve(jwtBearerToken);
-                            }
-                            else {
-                                //user not found
-                                resolve(null);
-                            }
-                        }
-                    )
-                    .catch(
-                        (error) => {
-                            reject(error);
-                        }
-                    );
-
+        //validate login And Password
+        db.findOne(User, {name: body.login, password: body.password})
+        .then( 
+            (user) => {
+                if (user) {
+                    const payload = {
+                        // Unique user id string
+                        sub: user_id,                  
+                        // Full name of user
+                        name: user.name,
+                        role: user.role,                    
+                        // Optional custom user root path
+                        // 'https://claims.tiny.cloud/drive/root': '/johndoe',                    
+                        // 10 minutes expiration
+                        exp: Math.floor(Date.now() / 1000) + (60 * 10)
+                      };
+                    const jwtBearerToken = jwt.sign(payload, process.env.RSA_PRIVATE_KEY, { algorithm: 'RS256'});
+                    const { password, ...userWithoutPassword } = user.toObject();
+                    resolve({
+                        user: userWithoutPassword,
+                        token: jwtBearerToken
+                    });
+                }
+                else {
+                    //user not found
+                    resolve(null);
+                }
+            }
+        )
+        .catch(
+            (error) => {
+                reject(error);
             }
         );
+
     });
 }

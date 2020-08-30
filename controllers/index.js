@@ -51,9 +51,14 @@ exports.updateUser = (req, res) => {
     );    
 }
 exports.findOneUser = (req, res) => {  
-    
-    services.findUserById(req.params.id)    
+    const currentUser = req.user;
 
+    // only allow admins to access other user records
+    if (id !== currentUser.sub && currentUser.role !== 'admin') {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    services.findUserById(req.params.id)    
     .then( (result) => {
         if (result) {
             res.send(result);    
