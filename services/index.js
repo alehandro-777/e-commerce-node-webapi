@@ -89,41 +89,29 @@ exports.findUserById = (id) => {
     return db.findById(User, {"_id": id});
 }
 
-/*
-const expressJwt = require('express-jwt');
-
-const RSA_PUBLIC_KEY = fs.readFileSync('./keys/public.key');
-
-const checkIfAuthenticatedFunc = expressJwt({
-    secret: RSA_PUBLIC_KEY
-});
-
-*/
-
 exports.login = (body) => {
 
     return new Promise((resolve, reject) => {
         //validate login And Password
-        db.findOne(User, {name: body.login, password: body.password})
+        console.log(body)
+        db.findOne(User, {email: body.email, password: body.password})
         .then( 
             (user) => {
                 if (user) {
+                    console.log(user)
                     const payload = {
                         // Unique user id string
-                        sub: user_id,                  
-                        // Full name of user
+                        sub: user._id,                  
                         name: user.name,
                         role: user.role,                    
-                        // Optional custom user root path
-                        // 'https://claims.tiny.cloud/drive/root': '/johndoe',                    
-                        // 10 minutes expiration
                         exp: Math.floor(Date.now() / 1000) + (60 * 10)
                       };
+
                     const jwtBearerToken = jwt.sign(payload, process.env.RSA_PRIVATE_KEY, { algorithm: 'RS256'});
                     const { password, ...userWithoutPassword } = user.toObject();
                     resolve({
                         user: userWithoutPassword,
-                        token: jwtBearerToken
+                        jwt: jwtBearerToken
                     });
                 }
                 else {

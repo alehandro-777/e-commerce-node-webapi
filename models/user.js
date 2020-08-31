@@ -2,17 +2,18 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
-   name: {
+   email: {
+      type: String
+    },
+    password: {
       type: String,
       required: true
     },
-   email: {
+    name: {
       type: String,
-      unique: true
+      required: true
     },
-   password: String,
-// Validation succeeds! Phone number is defined
-// and fits `DDD-DDD-DDDD`
+    // Validation Phone number is defined `DDD-DDD-DDDD`
    phone: {
       type: String,
       validate: {
