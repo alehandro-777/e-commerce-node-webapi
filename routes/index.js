@@ -2,7 +2,7 @@ const express = require('express')
 const user_controller = require('../controllers/user-controller')
 const product_controller = require('../controllers/product-controller')
 const product_cats_controller = require('../controllers/product-category-controller')
-
+const product_imgs_controller = require('../controllers/product-image-controller')
 
 const router = express.Router()
 const authorize = require('./auth')
@@ -28,7 +28,11 @@ router.get('/products',       product_controller.selectProducts )
 router.delete('/products/:id', product_controller.deleteProduct )
 router.put('/products/:id',    product_controller.updateProduct )
 router.get('/products/:id',    product_controller.findOneProduct )
-router.post('/products/:id/images',  product_controller.uploadProductImage )
+
+router.post('/products/:id/image',  product_imgs_controller.uploadProductImage )
+router.post('/products/:id/images',  product_imgs_controller.uploadProductImages )
+router.delete('/products/images/:id', product_imgs_controller.deleteOneImage);
+router.get('/products/:id/image', product_imgs_controller.findOneProductImage);
 
 router.post('/product-cats',      product_cats_controller.postProductCategory )
 router.get('/product-cats',       product_cats_controller.selectProductCategories )

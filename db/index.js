@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const connString = 'mongodb://localhost:27017/test';
-const connParams = {useNewUrlParser: true,useUnifiedTopology: true };
+const connParams = {useNewUrlParser: true,useUnifiedTopology: true, useFindAndModify: false };
 
 exports.create = (model) => {
     return new Promise((resolve, reject) => {
@@ -14,6 +14,32 @@ exports.create = (model) => {
         );        
         db.once('open', () => { 
             model.save()
+            .then( (result) => 
+                resolve(result)
+                )
+            .catch( (error) => 
+                reject(error)
+                )
+            .finally( () =>
+                db.close()
+            )
+        });   
+    });    
+  
+}
+
+exports.upsert = (Model, query, newDoc) => {
+    return new Promise((resolve, reject) => {
+        
+        mongoose.connect(connString, connParams);
+
+        const db = mongoose.connection;
+
+        db.on('error', (err) => 
+            reject(err)
+        );        
+        db.once('open', () => { 
+            Model.findOneAndUpdate(query, newDoc, {upsert: true})
             .then( (result) => 
                 resolve(result)
                 )

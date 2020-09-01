@@ -10,15 +10,15 @@ process.env. RSA_PRIVATE_KEY = fs.readFileSync('./keys/private.key');
 const app = express()
 const router = require('./routes')
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended:true}));
+
 app.use(cors());
 
 // parse requests of content-type - application/json
 app.use(bodyParser.json());
 app.use('', router)
 
-//public directory off of our root folder contains the static files
-app.use(express.static(__dirname + '/public'));
+app.use('/images', express.static(__dirname + '/uploads'));
 
 // global error handler
 app.use(errorHandler);

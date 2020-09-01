@@ -2,15 +2,15 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const modelSchema = new Schema({
-   //product_id: mongoose.ObjectIds,
-   name: String, 
-   desc: String,
+   product_id: mongoose.Schema.Types.ObjectId,
    width: Number,
    height: Number,
-   img: 
+   size: Number,
+   mimetype: String,
+   filename: 
    { 
-       data: Buffer, 
-       contentType: String 
+       type: String, 
+       require: true 
    } 
 });
 
