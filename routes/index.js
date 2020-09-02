@@ -2,7 +2,8 @@ const express = require('express')
 const user_controller = require('../controllers/user-controller')
 const product_controller = require('../controllers/product-controller')
 const product_cats_controller = require('../controllers/product-category-controller')
-const product_imgs_controller = require('../controllers/product-image-controller')
+const imgs_controller = require('../controllers/image-controller')
+const shop_cart_controller = require('../controllers/shopping-cart-controller')
 
 const router = express.Router()
 const authorize = require('./auth')
@@ -14,6 +15,7 @@ router.use(function timeLog (req, res, next) {
   next()
 })
 
+router.get('/', express.static(__dirname ));
 
 router.post('/login', user_controller.login )
 
@@ -29,10 +31,12 @@ router.delete('/products/:id', product_controller.deleteProduct )
 router.put('/products/:id',    product_controller.updateProduct )
 router.get('/products/:id',    product_controller.findOneProduct )
 
-router.post('/products/:id/image',  product_imgs_controller.uploadProductImage )
-router.post('/products/:id/images',  product_imgs_controller.uploadProductImages )
-router.delete('/products/images/:id', product_imgs_controller.deleteOneImage);
-router.get('/products/:id/image', product_imgs_controller.findOneProductImage);
+router.post('/image',  imgs_controller.uploadImage )
+router.post('/images',  imgs_controller.uploadManyImages )
+router.delete('/images/:id', imgs_controller.deleteOneImage);
+//router.get('/images/:id', product_imgs_controller.findOneImage);
+//router.get('/images', express.static(__dirname + '/uploads'));
+
 
 router.post('/product-cats',      product_cats_controller.postProductCategory )
 router.get('/product-cats',       product_cats_controller.selectProductCategories )
@@ -40,17 +44,9 @@ router.delete('/product-cats/:id', product_cats_controller.deleteProductCategory
 router.put('/product-cats/:id',    product_cats_controller.updateProductCategory )
 router.get('/product-cats/:id',    product_cats_controller.findOneProductCategory )
 
-//router.get('/products/:id/images',  product_controller.xxxx )
-//router.get('/products/:id/images/:img_id',  product_controller.xxxx )
-//app.post('/profile', upload.single('avatar'), function (req, res, next) {
-  // req.file is the `avatar` file
-  // req.body will hold the text fields, if there were any
-//})
- 
-//app.post('/photos/upload', upload.array('photos', 12), function (req, res, next) {
-  // req.files is array of `photos` files
-  // req.body will contain the text fields, if there were any
-//})
+router.post('/users/:id/cart',    shop_cart_controller.addProductToCart )
+router.delete('/users/:id/cart',  shop_cart_controller.removeProductFromCart )
 
+router.post('/shopcarts',    shop_cart_controller.create )
 
 module.exports =  router 

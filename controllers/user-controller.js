@@ -1,4 +1,4 @@
-const services = require('../services')
+const services = require('../services/user-service')
 
 exports.postUser = (req, res) => {  
 
