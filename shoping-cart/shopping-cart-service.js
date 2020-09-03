@@ -1,28 +1,6 @@
 const db = require('../db');
-const ShoppingCart = require('../models/shopping-cart');
-const mongoose = require('mongoose');
-
-const defaultPageLimit = 20;
-
-exports.translateQuery2findOptions = (query) => {
-    const projection = query.fields ? query.fields.replace(/,/g, " "): null;
-    const {page, per_page, sort, ...filter} = query;
-    const options = {};
-
-    options.limit = parseInt(per_page) || defaultPageLimit;
-    options.skip = (parseInt(page) -1)*options.limit || 0;
-    
-    //... birthdate_date:asc
-    const sort_params = sort ? sort.split(':') : null;
-
-    if (sort_params) {
-        const sort_params_obj = {};
-        sort_params_obj[sort_params[0]] = sort_params[1].toLowerCase() ==='desc' ? -1 : 1;  
-        options.sort = sort_params_obj || null;    
-    }
-
-    return {filter, projection, options};
-}
+const ShoppingCart = require('./shopping-cart-model');
+const base = require('../shared')
 
 exports.findById = (id) => {       
     return db.findById(ShoppingCart, {"_id": id});
@@ -43,10 +21,8 @@ exports.clear = (id) => {
     return db.deleteOne(ShoppingCart, {"_id": id});
 }
 
-exports.getPageOfItems = (query) => {
-
-    const find_spec = exports.translateQuery2findOptions(query);
-    return db.find(ShoppingCart, find_spec.filter , find_spec.projection, find_spec.options);
+exports.getPageOfItems = async  (query) => {
+    return await base.getPageOfDocs(ShoppingCart, query);
 }
 
 exports.addProduct = (id, body) => {    

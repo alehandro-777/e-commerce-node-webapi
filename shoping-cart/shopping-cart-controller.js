@@ -1,4 +1,5 @@
-const services = require('../services/shopping-cart-service')
+const services = require('./shopping-cart-service')
+
 
 exports.addProductToCart = (req, res) => {  
 
@@ -12,7 +13,6 @@ exports.addProductToCart = (req, res) => {
         }   
     );    
 }
-
 exports.removeProductFromCart = (req, res) => {  
 
     services.removeProduct(req.params.id, req.body)
@@ -25,7 +25,6 @@ exports.removeProductFromCart = (req, res) => {
         }   
     );    
 }
-
 exports.removeAllProductsFromCart = (req, res) => {  
     services.removeAll(req.params.id)
     .then( (result) => {
@@ -37,22 +36,10 @@ exports.removeAllProductsFromCart = (req, res) => {
         }   
     );    
 }
-
 exports.create = (req, res) => {  
 
     services.createNewCart(req.body)
 
-    .then( (result) => {
-            res.send(result);    
-        }
-    )
-    .catch( (error) => {
-        res.status(500).send(error)
-        }   
-    );    
-}
-exports.selectProductCategories = (req, res) => {  
-    services.getPageOfProductCategorys(req.query)    
     .then( (result) => {
             res.send(result);    
         }
@@ -105,6 +92,17 @@ exports.findOneProductCategory = (req, res) => {
             res.status(404).send('Object not found')
         }
     }
+    )
+    .catch( (error) => {
+        res.status(500).send(error)
+        }   
+    );    
+}
+exports.selectPage = (req, res) => {  
+    services.getPageOfItems(req.query)    
+    .then( (result) => {
+            res.send(result);    
+        }
     )
     .catch( (error) => {
         res.status(500).send(error)

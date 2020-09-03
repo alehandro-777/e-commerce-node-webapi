@@ -1,4 +1,4 @@
-const services = require('../services/user-service')
+const services = require('./user-service')
 
 exports.postUser = (req, res) => {  
 
@@ -13,6 +13,14 @@ exports.postUser = (req, res) => {
         }   
     );    
 }
+
+    //Link header example
+    //Link: <https://api.github.com/user/repos?page=3&per_page=100>; rel="next", <https://api.github.com/user/repos?page=50&per_page=100>; rel="last"
+    //next	The link relation for the immediate next page of results.
+    //last	The link relation for the last page of results.
+    //first	The link relation for the first page of results.
+    //prev	The link relation for the immediate previous page of results.
+
 exports.selectUsers = (req, res) => {  
     services.getPageOfUsers(req.query)    
     .then( (result) => {

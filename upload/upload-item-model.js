@@ -11,7 +11,9 @@ const modelSchema = new Schema({
    { 
        type: String, 
        require: true 
-   } 
+   },
+   created_at: { type: Date, default: Date.now },
+   enabled: { type: Boolean, default: true}, 
 });
 
 module.exports = mongoose.model('images', modelSchema);  

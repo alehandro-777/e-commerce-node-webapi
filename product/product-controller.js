@@ -1,8 +1,8 @@
-const services = require('../services/product-category-service')
+const services = require('./product-service')
 
-exports.postProductCategory = (req, res) => {  
+exports.postProduct = (req, res) => {  
 
-    services.createNewProductCategory(req.body)
+    services.createNewProduct(req.body)
 
     .then( (result) => {
             res.send(result);    
@@ -13,8 +13,8 @@ exports.postProductCategory = (req, res) => {
         }   
     );    
 }
-exports.selectProductCategories = (req, res) => {  
-    services.getPageOfProductCategorys(req.query)    
+exports.selectProducts = (req, res) => {  
+    services.getPageOfProducts(req.query)    
     .then( (result) => {
             res.send(result);    
         }
@@ -24,9 +24,9 @@ exports.selectProductCategories = (req, res) => {
         }   
     );    
 }
-exports.deleteProductCategory = (req, res) => {  
+exports.deleteProduct = (req, res) => {  
     
-    services.deleteOneProductCategory(req.params.id)    
+    services.deleteOneProduct(req.params.id)    
 
     .then( (result) => {
             res.send(result);    
@@ -37,9 +37,9 @@ exports.deleteProductCategory = (req, res) => {
         }   
     );    
 }
-exports.updateProductCategory = (req, res) => {  
+exports.updateProduct = (req, res) => {  
     
-    services.updateProductCategory(req.params.id, req.body)    
+    services.updateProduct(req.params.id, req.body)    
 
     .then( (result) => {
             res.send(result);    
@@ -50,15 +50,8 @@ exports.updateProductCategory = (req, res) => {
         }   
     );    
 }
-exports.findOneProductCategory = (req, res) => {  
-    const currentProductCategory = req.ProductCategory;
-
-    // only allow admins to access other ProductCategory records
-    if (id !== currentProductCategory.sub && currentProductCategory.role !== 'admin') {
-        return res.status(401).json({ message: 'Unauthorized' });
-    }
-
-    services.findProductCategoryById(req.params.id)    
+exports.findOneProduct = (req, res) => {  
+    services.findProductById(req.params.id)    
     .then( (result) => {
         if (result) {
             res.send(result);    
@@ -73,3 +66,5 @@ exports.findOneProductCategory = (req, res) => {
         }   
     );    
 }
+
+

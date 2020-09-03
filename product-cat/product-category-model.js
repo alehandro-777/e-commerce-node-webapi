@@ -13,7 +13,9 @@ const modelSchema = new Schema({
     _enabled: {
       type: Boolean,
       default: true
-    }
+    },
+    created_at: { type: Date, default: Date.now },
+    enabled: { type: Boolean, default: true},
 });
 
 module.exports = mongoose.model('product_categories', modelSchema);  

@@ -25,7 +25,9 @@ const userSchema = new Schema({
       enum : ['user','admin'],
       default: 'user'
   },
-   _enabled: Boolean
+  image_uri : { type: String, default: ""},
+  enabled: { type: Boolean, default: true},
+  created_at: { type: Date, default: Date.now }
 });
 
 module.exports = mongoose.model('users', userSchema);  

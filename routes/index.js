@@ -1,9 +1,9 @@
 const express = require('express')
-const user_controller = require('../controllers/user-controller')
-const product_controller = require('../controllers/product-controller')
-const product_cats_controller = require('../controllers/product-category-controller')
-const imgs_controller = require('../controllers/image-controller')
-const shop_cart_controller = require('../controllers/shopping-cart-controller')
+const user_controller = require('../user/user-controller')
+const product_controller = require('../product/product-controller')
+const product_cats_controller = require('../product-cat/product-category-controller')
+const imgs_controller = require('../upload/upload-controller')
+const shop_cart_controller = require('../shoping-cart/shopping-cart-controller')
 
 const router = express.Router()
 const authorize = require('./auth')
@@ -35,7 +35,7 @@ router.post('/image',  imgs_controller.uploadImage )
 router.post('/images',  imgs_controller.uploadManyImages )
 router.delete('/images/:id', imgs_controller.deleteOneImage);
 //router.get('/images/:id', product_imgs_controller.findOneImage);
-//router.get('/images', express.static(__dirname + '/uploads'));
+router.get('/images', imgs_controller.selectImages);
 
 
 router.post('/product-cats',      product_cats_controller.postProductCategory )
@@ -48,5 +48,6 @@ router.post('/users/:id/cart',    shop_cart_controller.addProductToCart )
 router.delete('/users/:id/cart',  shop_cart_controller.removeProductFromCart )
 
 router.post('/shopcarts',    shop_cart_controller.create )
+router.get('/shopcarts',    shop_cart_controller.selectPage )
 
 module.exports =  router 

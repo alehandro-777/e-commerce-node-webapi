@@ -17,7 +17,7 @@ exports.deleteOne = (Model, conditions ) => {
 }
 
 exports.count = (Model, filter ) => {
-    return Model.count(filter);   
+    return Model.countDocuments(filter);   
 } 
 
 exports.update = (Model, filter, doc, options ) => {

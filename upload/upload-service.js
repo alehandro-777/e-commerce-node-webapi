@@ -1,7 +1,8 @@
 const db = require('../db');
 const mongoose = require('mongoose');
 const fs = require('fs')
-const Image = require('../models/image');
+const Image = require('./upload-item-model');
+const base = require('../shared')
 
 exports.uploadOneImage = (files) => {
     const new_Image = new Image({
@@ -14,7 +15,6 @@ exports.uploadOneImage = (files) => {
 }
 
 exports.uploadManyImages = (files) => {
-    console.log(id, files)
 }
 
 
@@ -52,4 +52,8 @@ exports.deleteOneImage = (id) => {
         );    
     })   
     
+}
+
+exports.getPageOfImages = async  (query) => {
+    return await base.getPageOfDocs(Image, query);
 }

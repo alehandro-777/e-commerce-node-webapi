@@ -1,9 +1,9 @@
 const db = require('../db');
-const User = require('../models/user');
+const User = require('./user-model');
 const jwt = require('jsonwebtoken');
+const base = require('../shared')
 
 
-const defaultPageLimit = 20;
 
 exports.createNewUser = (body) => {
       
@@ -17,35 +17,8 @@ exports.deleteOneUser = (id) => {
     return db.deleteOne(User, {"_id": id});
 }
 
-exports.translateQuery2findOptions = (query) => {
-    const projection = query.fields ? query.fields.replace(/,/g, " "): null;
-    const {page, per_page, sort, ...filter} = query;
-    const options = {};
-
-    options.limit = parseInt(per_page) || defaultPageLimit;
-    options.skip = (parseInt(page) -1)*options.limit || 0;
-    
-    //... birthdate_date:asc
-    const sort_params = sort ? sort.split(':') : null;
-
-    if (sort_params) {
-        const sort_params_obj = {};
-        sort_params_obj[sort_params[0]] = sort_params[1].toLowerCase() ==='desc' ? -1 : 1;  
-        options.sort = sort_params_obj || null;    
-    }
-
-    return {filter, projection, options};
-}
-
-exports.getPageOfUsers = (query) => {
-
-    const find_spec = exports.translateQuery2findOptions(query);
-
-    console.log(find_spec.filter)
-    console.log(find_spec.projection)
-    console.log(find_spec.options)
-
-    return db.find(User, find_spec.filter , find_spec.projection, find_spec.options);
+exports.getPageOfUsers = async  (query) => {
+    return await base.getPageOfDocs(User, query);
 }
 
 exports.updateUser = (id, body) => {

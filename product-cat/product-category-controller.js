@@ -1,8 +1,8 @@
-const services = require('../services/product-service')
+const services = require('./product-category-service')
 
-exports.postProduct = (req, res) => {  
+exports.postProductCategory = (req, res) => {  
 
-    services.createNewProduct(req.body)
+    services.createNewProductCategory(req.body)
 
     .then( (result) => {
             res.send(result);    
@@ -13,8 +13,8 @@ exports.postProduct = (req, res) => {
         }   
     );    
 }
-exports.selectProducts = (req, res) => {  
-    services.getPageOfProducts(req.query)    
+exports.selectProductCategories = (req, res) => {  
+    services.getPageOfProductProductCategories(req.query)    
     .then( (result) => {
             res.send(result);    
         }
@@ -24,9 +24,9 @@ exports.selectProducts = (req, res) => {
         }   
     );    
 }
-exports.deleteProduct = (req, res) => {  
+exports.deleteProductCategory = (req, res) => {  
     
-    services.deleteOneProduct(req.params.id)    
+    services.deleteOneProductCategory(req.params.id)    
 
     .then( (result) => {
             res.send(result);    
@@ -37,9 +37,9 @@ exports.deleteProduct = (req, res) => {
         }   
     );    
 }
-exports.updateProduct = (req, res) => {  
+exports.updateProductCategory = (req, res) => {  
     
-    services.updateProduct(req.params.id, req.body)    
+    services.updateProductCategory(req.params.id, req.body)    
 
     .then( (result) => {
             res.send(result);    
@@ -50,8 +50,15 @@ exports.updateProduct = (req, res) => {
         }   
     );    
 }
-exports.findOneProduct = (req, res) => {  
-    services.findProductById(req.params.id)    
+exports.findOneProductCategory = (req, res) => {  
+    const currentProductCategory = req.ProductCategory;
+
+    // only allow admins to access other ProductCategory records
+    if (id !== currentProductCategory.sub && currentProductCategory.role !== 'admin') {
+        return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    services.findProductCategoryById(req.params.id)    
     .then( (result) => {
         if (result) {
             res.send(result);    
@@ -66,5 +73,3 @@ exports.findOneProduct = (req, res) => {
         }   
     );    
 }
-
-

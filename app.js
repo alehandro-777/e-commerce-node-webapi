@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const errorHandler = require('./routes/error-handler')
 
-
+const port = 3000;
 const connString = 'mongodb://localhost:27017/test';
 const connParams = {useNewUrlParser: true,useUnifiedTopology: true, useFindAndModify: false };
 
@@ -23,6 +23,7 @@ mongoose.connection.once('open', () => {
 
 process.on('exit', ()=>{
     mongoose.connection.close();
+    console.log(`Server stoped, process exit`)
 });
 //catches ctrl+c event
 process.on('SIGINT', ()=>{
@@ -53,6 +54,5 @@ app.use(errorHandler);
 
 //console.log(process.env)
 
-console.log('Server started at 3000')
-
-app.listen(3000)
+console.log(`Server started at port: ${port}`)
+app.listen(port)

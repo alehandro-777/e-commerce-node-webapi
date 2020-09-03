@@ -1,4 +1,4 @@
-const services = require('../services/image-service')
+const services = require('./upload-service')
 const multer  = require('multer')
 const path = require("path")
 
@@ -118,6 +118,18 @@ exports.deleteOneImage = (req, res) => {
             res.status(404).send('Object not found')
         }
     }
+    )
+    .catch( (error) => {
+        res.status(500).send(error)
+        }   
+    );    
+}
+
+exports.selectImages = (req, res) => {  
+    services.getPageOfImages(req.query)    
+    .then( (result) => {
+            res.send(result);    
+        }
     )
     .catch( (error) => {
         res.status(500).send(error)
