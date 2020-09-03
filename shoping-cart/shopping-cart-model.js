@@ -11,12 +11,23 @@ const modelSchema = new Schema({
             product_descr: String,
             quantity: Number,
             price_one: Number,
-            price_line: Number
+            price_line: { type: Number, default: 0 },
         }        
     ],
-    total : Number,
+    total : { type: Number, default: 0 },
     created_at: { type: Date, default: Date.now },
     enabled: { type: Boolean, default: true},
 });
+
+modelSchema.methods.calcTotal = function () {
+    console.log(this)
+    this.total = this.lines.reduce(
+        (acc,curr) =>{
+            curr.price_line = curr.quantity * curr.price_one;
+            return acc + curr.price_line;
+        },
+        0
+    )
+}
 
 module.exports = mongoose.model('shopcarts', modelSchema);  
