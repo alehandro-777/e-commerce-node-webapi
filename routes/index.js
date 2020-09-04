@@ -44,10 +44,13 @@ router.delete('/product-cats/:id', product_cats_controller.deleteProductCategory
 router.put('/product-cats/:id',    product_cats_controller.updateProductCategory )
 router.get('/product-cats/:id',    product_cats_controller.findOneProductCategory )
 
-router.post('/users/:id/cart',    shop_cart_controller.addProductToCart )
-router.delete('/users/:id/cart',  shop_cart_controller.removeProductFromCart )
 
+router.post('/shopcarts/:id/lines',    shop_cart_controller.addProduct )
+router.delete('/shopcarts/:id/lines/:line_id',  shop_cart_controller.removeLine )
+router.delete('/shopcarts/:id/lines',  shop_cart_controller.removeAll )
+router.patch('/shopcarts/:id/lines/:line_id',  shop_cart_controller.changeLine )
 router.post('/shopcarts',    shop_cart_controller.create )
 router.get('/shopcarts',    shop_cart_controller.selectPage )
+
 
 module.exports =  router 

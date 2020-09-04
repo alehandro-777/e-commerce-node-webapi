@@ -1,7 +1,7 @@
 const services = require('./shopping-cart-service')
 
-
-exports.addProductToCart = (req, res) => {  
+//POST id - shoping cart { "product_id": "5f51ea5dc4fb441d4c85739e" }
+exports.addProduct = (req, res) => {  
 
     services.addProduct(req.params.id, req.body)
     .then( (result) => {
@@ -13,9 +13,11 @@ exports.addProductToCart = (req, res) => {
         }   
     );    
 }
-exports.removeProductFromCart = (req, res) => {  
 
-    services.removeProduct(req.params.id, req.body)
+//DELETE id - shoping cart { "product_id": "5f51ea5dc4fb441d4c85739e" }
+exports.removeLine = (req, res) => {  
+
+    services.removeLine(req.params.id, req.params.line_id)
     .then( (result) => {
             res.send(result);    
         }
@@ -25,7 +27,8 @@ exports.removeProductFromCart = (req, res) => {
         }   
     );    
 }
-exports.removeAllProductsFromCart = (req, res) => {  
+
+exports.removeAll = (req, res) => {  
     services.removeAll(req.params.id)
     .then( (result) => {
             res.send(result);    
@@ -36,6 +39,20 @@ exports.removeAllProductsFromCart = (req, res) => {
         }   
     );    
 }
+//PATCH id - shoping cart { "product_id": "5f51ea5dc4fb441d4c85739e", "quantity" : 10 }
+exports.changeLine = (req, res) => {  
+    services.changeProductQuantity(req.params.id,req.params.line_id, req.body)
+    .then( (result) => {
+            res.send(result);    
+        }
+    )
+    .catch( (error) => {
+        res.status(500).send(error)
+        }   
+    );    
+}
+
+
 exports.create = (req, res) => {  
 
     services.createNewCart(req.body)
@@ -49,55 +66,7 @@ exports.create = (req, res) => {
         }   
     );    
 }
-exports.deleteProductCategory = (req, res) => {  
-    
-    services.deleteOneProductCategory(req.params.id)    
 
-    .then( (result) => {
-            res.send(result);    
-        }
-    )
-    .catch( (error) => {
-        res.status(500).send(error)
-        }   
-    );    
-}
-exports.updateProductCategory = (req, res) => {  
-    
-    services.updateProductCategory(req.params.id, req.body)    
-
-    .then( (result) => {
-            res.send(result);    
-        }
-    )
-    .catch( (error) => {
-        res.status(500).send(error)
-        }   
-    );    
-}
-exports.findOneProductCategory = (req, res) => {  
-    const currentProductCategory = req.ProductCategory;
-
-    // only allow admins to access other ProductCategory records
-    if (id !== currentProductCategory.sub && currentProductCategory.role !== 'admin') {
-        return res.status(401).json({ message: 'Unauthorized' });
-    }
-
-    services.findProductCategoryById(req.params.id)    
-    .then( (result) => {
-        if (result) {
-            res.send(result);    
-        }
-        else {
-            res.status(404).send('Object not found')
-        }
-    }
-    )
-    .catch( (error) => {
-        res.status(500).send(error)
-        }   
-    );    
-}
 exports.selectPage = (req, res) => {  
     services.getPageOfItems(req.query)    
     .then( (result) => {

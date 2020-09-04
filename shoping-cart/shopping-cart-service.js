@@ -26,21 +26,26 @@ exports.getPageOfItems = async  (query) => {
     return await base.getPageOfDocs(ShoppingCart, query);
 }
 
+//POST id - shoping cart { "product_id": "5f51ea5dc4fb441d4c85739e" }
 exports.addProduct = async (id, body) => {    
 try{        //find cart
-    const cartModel = await db.findById(ShoppingCart, {"_id": id});
+    const cartModel = await db.findById(ShoppingCart, {"_id": id}).populate('lines.product');
 
     if (!cartModel) throw new Error("Cart doesn't exist");
+    
+    console.log(cartModel)  
 
         //find product in cart
-        const line_index = cartModel.lines.findIndex( (line)=>{
-            const match = body.product_id == line.product_id;
-            return match;
+        const line_index = cartModel.lines.findIndex( (line)=>{            
+                const match = body.product_id == line.product._id;
+                return match;
             });
+
         //product  exists in cart - increment counter
         if (line_index > -1) { 
 
             cartModel.lines[line_index].quantity += 1;
+
             cartModel.calcTotal();
 
         } else {//product doesn't exist in cart add new line to cart
@@ -50,12 +55,8 @@ try{        //find cart
             if (!selected_product) throw new Error("Product doesn't exist");
 
             const new_line = { 
-                product_id :  selected_product._id, 
-                quantity: 1,
-                price_one: selected_product.price,
-                product_name: selected_product.name,
-                product_descr: selected_product.descr,
-                product_img_src : selected_product.image_uri
+                product :  selected_product,
+                quantity :  parseInt(body.quantity) || 1
             };
             
             cartModel.lines.push(new_line);
@@ -70,36 +71,67 @@ try{        //find cart
     }            
 }
 
-exports.removeProduct = (id, body) => {    
-    //find cart
-    return db.findById(ShoppingCart, {"_id": id}).then(
-        (cartModel) => {
-            if (!cartModel) return null;
+//'/shopcarts/:id/lines/:line_id'
+//PATCH id - shoping cart { "quantity" : 10 }
+exports.changeProductQuantity = async (id, line_id, body) => {    
+    try{        //find cart
+        const cartModel = await db.findById(ShoppingCart, {"_id": id}).populate('lines.product');
+    
+        if (!cartModel) throw new Error("Cart doesn't exist");
+    
+        console.log(cartModel)
             //find product in cart
-            const line_index = cartModel.lines.findIndex( (line)=>{
-                const match = body.product_id == line.product_id;
-
+            const line_index = cartModel.lines.findIndex( (line) => {
+                const match = line_id == line._id;
                 return match;
-            } );
-            //product  exists in cart
-            if (line_index > -1) {        
-                cartModel.lines[line_index].quantity -= 1;
-                //remove from cart
-
-                if (cartModel.lines[line_index].quantity < 1) {
-
-                    cartModel.lines = (cartModel.lines.length > 1) ? cartModel.lines.splice(line_index, 1) : []; 
-                }
-            } else {//product doesn't exist in cart
-                throw new Error(`product doesn't exist in cart`);
-            } 
-            cartModel.calcTotal();                     
-            cartModel.save((err)=> {
-                if(err) throw err;                
-            });
-            return cartModel;
+                });
+            
+            //product  exists in cart - increment counter
+            if (line_index > -1) { 
+    
+                cartModel.lines[line_index].quantity = parseInt(body.quantity);
+                cartModel.calcTotal();
+    
+            } else {//product doesn't exist in cart add new line to cart
+                throw new Error('product doesn exist in cart' );
+            }                      
+            await cartModel.save();
+            return cartModel; 
+        }
+        catch(err)
+        {
+            throw err;
         }            
-    );                      
+}
+//'/shopcarts/:id/lines/:line_id'
+//DELETE id - shoping cart {  }
+exports.removeLine = async (id, line_id) => {    
+    try{        //find cart
+        const cartModel = await db.findById(ShoppingCart, {"_id": id}).populate('lines.product');
+    
+        if (!cartModel) throw new Error("Cart doesn't exist");
+    
+            //find line in cart
+            const line_index = cartModel.lines.findIndex( (line)=>{
+                const match = line_id == line._id;
+                return match;
+                });
+            //line  exists in cart - remove line
+            if (line_index > -1) { 
+
+            cartModel.lines = (cartModel.lines.length > 1) ? cartModel.lines.splice(line_index, 1) : []; 
+            cartModel.calcTotal();
+    
+            } else {//product line doesn't exist in cart 
+                throw new Error('product doesn exist in cart' );
+            }                      
+            await cartModel.save();
+            return cartModel; 
+        }
+        catch(err)
+        {
+            throw err;
+        }            
 }
 
 exports.removeAll = (id) => {    

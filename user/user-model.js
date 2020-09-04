@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const userSchema = new Schema({
+  shopcart:{ type: Schema.Types.ObjectId, ref: 'shopcarts' },
    email: {
       type: String
     },
