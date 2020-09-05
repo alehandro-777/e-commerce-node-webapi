@@ -52,12 +52,6 @@ exports.updateProductCategory = (req, res) => {
 }
 exports.findOneProductCategory = (req, res) => {  
     const currentProductCategory = req.ProductCategory;
-
-    // only allow admins to access other ProductCategory records
-    if (id !== currentProductCategory.sub && currentProductCategory.role !== 'admin') {
-        return res.status(401).json({ message: 'Unauthorized' });
-    }
-
     services.findProductCategoryById(req.params.id)    
     .then( (result) => {
         if (result) {

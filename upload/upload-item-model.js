@@ -7,11 +7,9 @@ const modelSchema = new Schema({
    height: Number,
    size: Number,
    mimetype: String,
-   filename: 
-   { 
-       type: String, 
-       require: true 
-   },
+   destination: { type: String, require: true },
+   filename: { type: String, require: true },
+   path: { type: String, require: true },
    created_at: { type: Date, default: Date.now },
    enabled: { type: Boolean, default: true}, 
 });

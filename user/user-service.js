@@ -38,12 +38,11 @@ exports.login = (body) => {
 
     return new Promise((resolve, reject) => {
         //validate login And Password
-        console.log(body)
-        db.findOne(User, {email: body.email, password: body.password})
+        db.findOne(User, {login: body.login, password: body.password})
         .then( 
             (user) => {
                 if (user) {
-                    console.log(user)
+                    
                     const payload = {
                         // Unique user id string
                         sub: user._id,                  

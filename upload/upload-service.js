@@ -5,10 +5,15 @@ const Image = require('./upload-item-model');
 const base = require('../shared')
 
 exports.uploadOneImage = (files) => {
+
+    console.log(files[0])
+
     const new_Image = new Image({
         size: files[0].size,
         mimetype: files[0].mimetype,
-        filename: files[0].path
+        destination: files[0].destination,
+        filename: files[0].filename,
+        path: files[0].path
     });
 
     return db.create(new_Image);
@@ -27,7 +32,7 @@ exports.deleteOneImage = (id) => {
                              
                 if (image){
                     
-                    const path = process.cwd() + '\\' + image.filename;
+                    const path = process.cwd() + '\\' + image.path;
                     fs.unlink(
                         path, 
                         (err) => {

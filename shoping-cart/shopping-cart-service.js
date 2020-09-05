@@ -18,9 +18,6 @@ exports.deleteCart = (id) => {
     return db.deleteOne(ShoppingCart, {"_id": id});
 }
 
-exports.clear = (id) => {       
-    return db.deleteOne(ShoppingCart, {"_id": id});
-}
 
 exports.getPageOfItems = async  (query) => {
     return await base.getPageOfDocs(ShoppingCart, query);
@@ -79,7 +76,6 @@ exports.changeProductQuantity = async (id, line_id, body) => {
     
         if (!cartModel) throw new Error("Cart doesn't exist");
     
-        console.log(cartModel)
             //find product in cart
             const line_index = cartModel.lines.findIndex( (line) => {
                 const match = line_id == line._id;
@@ -116,12 +112,14 @@ exports.removeLine = async (id, line_id) => {
                 const match = line_id == line._id;
                 return match;
                 });
+
+                console.log(cartModel, line_index)    
             //line  exists in cart - remove line
             if (line_index > -1) { 
 
-            cartModel.lines = (cartModel.lines.length > 1) ? cartModel.lines.splice(line_index, 1) : []; 
+            cartModel.lines = (cartModel.lines.length > 1) ? cartModel.lines.splice(line_index-1, 1) : []; 
             cartModel.calcTotal();
-    
+            console.log(cartModel, line_index)      
             } else {//product line doesn't exist in cart 
                 throw new Error('product doesn exist in cart' );
             }                      
@@ -134,12 +132,15 @@ exports.removeLine = async (id, line_id) => {
         }            
 }
 
+//Clear the card '/shopcarts/:id/lines'
+//DELETE id - shoping cart {  }
 exports.removeAll = (id) => {    
     //find cart
     return db.findById(ShoppingCart, {"_id": id}).then(
         (cartModel) => {
             if (!cartModel) return null;
             cartModel.lines = [];
+            cartModel.calcTotal();
             cartModel.save((err)=> {
                 if(err) throw err;                
             });

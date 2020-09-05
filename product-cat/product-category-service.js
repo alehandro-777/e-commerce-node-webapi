@@ -21,7 +21,6 @@ exports.updateProductCategory = (id, body) => {
        
     const new_ProductCategory = new ProductCategory(body).toObject();
     delete new_ProductCategory['_id'];
-    console.log(new_ProductCategory);
 
     return db.update(ProductCategory, {"_id": id}, new_ProductCategory);
 }

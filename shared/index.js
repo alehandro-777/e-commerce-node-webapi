@@ -37,7 +37,7 @@ exports.getPageOfDocs = async (Model, query) => {
 
     const list = await db.find(Model, find_spec.filter , find_spec.projection, find_spec.options);
 
-    const total = await db.count(Model);
+    const total = await db.count(Model, find_spec.filter);
 
     const link = createLinkHeader(find_spec.page, find_spec.options.limit, total)
 

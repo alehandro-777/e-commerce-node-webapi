@@ -38,11 +38,11 @@ router.delete('/images/:id', imgs_controller.deleteOneImage);
 router.get('/images', imgs_controller.selectImages);
 
 
-router.post('/product-cats',      product_cats_controller.postProductCategory )
-router.get('/product-cats',       product_cats_controller.selectProductCategories )
-router.delete('/product-cats/:id', product_cats_controller.deleteProductCategory )
-router.put('/product-cats/:id',    product_cats_controller.updateProductCategory )
-router.get('/product-cats/:id',    product_cats_controller.findOneProductCategory )
+router.post('/categories',      product_cats_controller.postProductCategory )
+router.get('/categories',       product_cats_controller.selectProductCategories )
+router.delete('/categories/:id', product_cats_controller.deleteProductCategory )
+router.patch('/categories/:id',    product_cats_controller.updateProductCategory )
+router.get('/categories/:id',    product_cats_controller.findOneProductCategory )
 
 
 router.post('/shopcarts/:id/lines',    shop_cart_controller.addProduct )
