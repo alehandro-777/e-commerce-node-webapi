@@ -6,7 +6,7 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const errorHandler = require('./routes/error-handler')
 
-const port = config.get('expressbConfig.port');
+const port = process.env.PORT || 3000;
 const connString = config.get('dbConfig.connString');
 
 
@@ -55,7 +55,7 @@ app.use('/images', express.static(__dirname + '/images'));
 // global error handler
 app.use(errorHandler);
 
-//console.log(process.env)
+//console.log(process.env.PORT)
 
 console.log(`Server started at port: ${port}`)
-app.listen(port)
+app.listen(process.env.PORT)
