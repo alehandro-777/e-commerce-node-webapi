@@ -1,5 +1,7 @@
 const db = require('../db');
-const defaultPageLimit = 5;
+const config = require('config');
+
+const defaultPageLimit = config.get('paginator.limit');;
 
 translateQuery2findOptions = (query) => {
     const projection = query.fields ? query.fields.replace(/,/g, " "): null;

@@ -1,0 +1,8 @@
+{
+    "dbConfig": {
+        "connString": "mongodb+srv://mongo_masterkey123:2hRgv56G8ZygFfc@cluster0.cfjsw.mongodb.net/testdb-1?retryWrites=true&w=majority"
+      },
+      "expressbConfig": {
+        "port": 80
+      }
+}

@@ -1,12 +1,15 @@
 const fs = require('fs')
+const config = require('config');
 const mongoose = require('mongoose');
 const express = require('express')
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const errorHandler = require('./routes/error-handler')
 
-const port = 3000;
-const connString = 'mongodb://localhost:27017/test';
+const port = config.get('expressbConfig.port');
+const connString = config.get('dbConfig.connString');
+
+
 const connParams = {useNewUrlParser: true,useUnifiedTopology: true, useFindAndModify: false };
 
 mongoose.connect(connString, connParams);
