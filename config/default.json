@@ -2,9 +2,6 @@
     "dbConfig": {
         "connString": "mongodb://localhost:27017/test"
       },
-      "expressbConfig": {
-        "port": 3000
-      },
       "paginator": {
         "limit": 3
       }      

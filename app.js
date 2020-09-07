@@ -50,6 +50,9 @@ app.use(bodyParser.json());
 app.use('', router)
 
 app.use('/', express.static(__dirname ));
+
+fs.existsSync("images") || fs.mkdirSync("images");
+
 app.use('/images', express.static(__dirname + '/images'));
 
 // global error handler
@@ -58,4 +61,4 @@ app.use(errorHandler);
 //console.log(process.env.PORT)
 
 console.log(`Server started at port: ${port}`)
-app.listen(process.env.PORT)
+app.listen(port)

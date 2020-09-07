@@ -1,9 +1,12 @@
 const express = require('express')
+
 const user_controller = require('../user/user-controller')
 const product_controller = require('../product/product-controller')
 const product_cats_controller = require('../product-cat/product-category-controller')
 const imgs_controller = require('../upload/upload-controller')
 const shop_cart_controller = require('../shoping-cart/shopping-cart-controller')
+const cfg_forms_controller = require('../forms/forms-controller')
+const form_data_controller = require('../forms/forms-data-controller')
 
 const router = express.Router()
 const authorize = require('./auth')
@@ -51,6 +54,20 @@ router.delete('/shopcarts/:id/lines',  shop_cart_controller.removeAll )
 router.patch('/shopcarts/:id/lines/:line_id',  shop_cart_controller.changeLine )
 router.post('/shopcarts',    shop_cart_controller.create )
 router.get('/shopcarts',    shop_cart_controller.selectPage )
+
+
+router.post('/forms',      cfg_forms_controller.create )
+router.get('/forms',       cfg_forms_controller.select )
+router.delete('/forms/:id', cfg_forms_controller.delete )
+router.patch('/forms/:id',    cfg_forms_controller.update )
+router.get('/forms/:id',    cfg_forms_controller.findOne )
+
+
+router.post('/formvalues',      form_data_controller.create )
+router.get('/formvalues',       form_data_controller.select )
+router.delete('/formvalues/:id', form_data_controller.delete )
+router.patch('/formvalues/:id',    form_data_controller.update )
+router.get('/formvalues/:id',    form_data_controller.findOne )
 
 
 module.exports =  router 
