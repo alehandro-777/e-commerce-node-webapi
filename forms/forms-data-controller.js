@@ -1,6 +1,6 @@
 const services = require('./form-data-service')
 
-exports.post = (req, res) => {  
+exports.create = (req, res) => {  
 
     services.create(req.body)
 
