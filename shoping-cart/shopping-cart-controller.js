@@ -1,5 +1,18 @@
 const services = require('./shopping-cart-service')
 
+exports.findById = (req, res) => {  
+
+    services.findById(req.params.id)
+    .then( (result) => {
+            res.send(result);    
+        }
+    )
+    .catch( (error) => {
+        res.status(500).send(error)
+        }   
+    );    
+}
+
 //POST id - shoping cart { "product_id": "5f51ea5dc4fb441d4c85739e" }
 exports.addProduct = (req, res) => {  
 

@@ -4,7 +4,7 @@ const Product = require('../product/product-model')
 const base = require('../shared')
 
 exports.findById = (id) => {       
-    return db.findById(ShoppingCart, {"_id": id});
+    return db.findById(ShoppingCart, {"_id": id}).populate('lines.product');
 }
 
 exports.createNewCart = (body) => {

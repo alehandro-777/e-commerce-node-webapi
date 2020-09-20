@@ -54,7 +54,7 @@ router.delete('/shopcarts/:id/lines',  shop_cart_controller.removeAll )
 router.patch('/shopcarts/:id/lines/:line_id',  shop_cart_controller.changeLine )
 router.post('/shopcarts',    shop_cart_controller.create )
 router.get('/shopcarts',    shop_cart_controller.selectPage )
-
+router.get('/shopcarts/:id',    shop_cart_controller.findById )
 
 router.post('/forms',      cfg_forms_controller.create )
 router.get('/forms',       cfg_forms_controller.select )

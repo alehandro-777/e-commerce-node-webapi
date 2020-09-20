@@ -9,6 +9,7 @@ exports.upsert = (Model, query, newDoc) => {
 }
 
 exports.find = (Model, filter , projection, options) => {
+    console.log(filter)
     return Model.find(filter , projection, options);
 }
 
