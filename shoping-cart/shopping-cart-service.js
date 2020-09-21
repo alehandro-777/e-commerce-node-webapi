@@ -105,24 +105,14 @@ exports.removeLine = async (id, line_id) => {
     try{        //find cart
         const cartModel = await db.findById(ShoppingCart, {"_id": id}).populate('lines.product');
     
-        if (!cartModel) throw new Error("Cart doesn't exist");
-    
+        if (!cartModel) throw new Error("Cart doesn't exist");    
             //find line in cart
-            const line_index = cartModel.lines.findIndex( (line)=>{
-                const match = line_id == line._id;
-                return match;
-                });
+            const arr_wo_line = cartModel.lines.filter( (line)=>{ 
+                return line_id != line._id; } );
+                       
+            cartModel.lines = arr_wo_line;
 
-                console.log(cartModel, line_index)    
-            //line  exists in cart - remove line
-            if (line_index > -1) { 
-
-            cartModel.lines = (cartModel.lines.length > 1) ? cartModel.lines.splice(line_index-1, 1) : []; 
             cartModel.calcTotal();
-            console.log(cartModel, line_index)      
-            } else {//product line doesn't exist in cart 
-                throw new Error('product doesn exist in cart' );
-            }                      
             await cartModel.save();
             return cartModel; 
         }

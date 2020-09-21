@@ -2,14 +2,21 @@ const db = require('../db');
 const User = require('./user-model');
 const jwt = require('jsonwebtoken');
 const base = require('../shared')
+const ShoppingCart = require('../shoping-cart/shopping-cart-model')
 
-
-
-exports.createNewUser = (body) => {
-      
+exports.createNewUser = async (body) => {      
     const new_user = new User(body);
+    const user = await db.create(new_user);
 
-    return db.create(new_user);
+    const new_shop_cart = new ShoppingCart({user : user._id});
+
+    const shop_cart = await db.create(new_shop_cart);
+
+    user.shopcart = shop_cart._id;
+    
+    await user.save();
+
+    return user;
 }
 
 exports.deleteOneUser = (id) => {    
