@@ -10,6 +10,7 @@ const modelSchema = new Schema({
             sub_total: { type: Number, default: 0 },
         }        
     ],
+    count : { type: Number, default: 0 },
     total : { type: Number, default: 0 },
     created_at: { type: Date, default: Date.now },
     enabled: { type: Boolean, default: true},
@@ -23,6 +24,12 @@ modelSchema.methods.calcTotal = function () {
         },
         0
     )
+    this.count = this.lines.reduce(
+        (acc,curr) =>{
+            return acc + curr.quantity;
+        },
+        0
+    )   
 }
 
 module.exports = mongoose.model('shopcarts', modelSchema);  
