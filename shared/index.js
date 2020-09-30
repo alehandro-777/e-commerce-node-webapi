@@ -8,6 +8,10 @@ translateQuery2findOptions = (query) => {
     const {page, per_page, sort, ...filter} = query;
     const options = {};
 
+    for (const [key, value] of Object.entries(filter)) {
+        filter[key] = new RegExp(value, 'i')
+    }
+
     options.limit = parseInt(per_page) || defaultPageLimit;
     options.skip = (parseInt(page) -1)*options.limit || 0;
     

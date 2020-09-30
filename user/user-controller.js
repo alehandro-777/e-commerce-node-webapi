@@ -58,6 +58,22 @@ exports.updateUser = (req, res) => {
         }   
     );    
 }
+
+exports.testFreeLogin = (req, res) => {  
+
+    services.testfreelogin(req.params.login)    
+    .then( (result) => {
+        if (result) {
+            res.send(result);    
+        }
+    }
+    )
+    .catch( (error) => {
+        res.status(500).send(error)
+        }   
+    );    
+}
+
 exports.findOneUser = (req, res) => {  
     const currentUser = req.user;
 

@@ -41,6 +41,35 @@ exports.findUserById = (id) => {
     return db.findById(User, {"_id": id});
 }
 
+exports.testfreelogin = (login) => {
+
+    return new Promise((resolve, reject) => {
+        //validate login And Password
+        db.findOne(User, {login: login})
+        .then( 
+            (user) => {
+                if (user) {
+                    resolve({
+                        free: false
+                    });
+                }
+                else {
+                    //user not found
+                    resolve({
+                        free: true
+                    });
+                }
+            }
+        )
+        .catch(
+            (error) => {
+                reject(error);
+            }
+        );
+
+    });
+}
+
 exports.login = (body) => {
 
     return new Promise((resolve, reject) => {
